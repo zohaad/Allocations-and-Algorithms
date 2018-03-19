@@ -21,7 +21,6 @@ public class Read_Graph {
             calculate_Degree(nodes_edges[0], degree, cost);
             filter_degree(nodes_edges[0], degree, cost, terminal);
 
-
             /*for(int i=0;i<terminal.length; i++){
                 System.out.println(terminal[i]);
             }*/
