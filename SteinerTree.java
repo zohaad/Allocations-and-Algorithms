@@ -25,7 +25,7 @@ public class SteinerTree {
 
 	public static int[] nodes_edges(Scanner scan) {
 
-		scan.nextLine(); // 1st line is useless
+		scan.nextLine(); 
 
 		String line = scan.nextLine();
 		int nodes = Integer.parseInt(line.split(" ")[1]);
