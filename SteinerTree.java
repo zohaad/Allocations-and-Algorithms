@@ -10,7 +10,7 @@ public class SteinerTree {
 		// max int array is size 22516
 		//int[][] cost = new int[22516][22516];
 
-		String filename = "instance001.gr";
+		String filename = "instance" + args[0] + ".gr";
 		File file = new File(filename);
 		try {
 			Scanner scan = new Scanner(file);
@@ -18,9 +18,12 @@ public class SteinerTree {
 			int[][] cost = read_matrix(scan, nodes_edges[0]);
 			int[] terminals = read_terminals(scan);
 
-			System.out.println(cost[1129][1254]);
-			System.out.println(cost[1129][1253]);
-			System.out.println(nodes_edges[0] + " " + nodes_edges[1]);
+			// System.out.println(cost[1254][1129]);
+			// System.out.println(cost[1253][1129]);
+			// System.out.println(nodes_edges[0] + " " + nodes_edges[1]);
+
+			MST mst = new MST(cost, terminals);
+			mst.delete_leaves();
 
 			// close scanner
 			scan.close();
@@ -48,15 +51,21 @@ public class SteinerTree {
 	public static int[][] read_matrix(Scanner scan, int nodes)
 	throws java.io.FileNotFoundException {
 
-		int[][] cost = new int[nodes][nodes];
-		int from;
-		int to;
+		int[][] cost = new int[nodes][];
+
+		// make triangular matrix
+		for (int i = 0; i < nodes; i++) {
+			cost[i] = new int[i + 1];
+		}
+
+		int col;
+		int row;
 		int c;
 
 		// make other edges cost very large
 		int max = (int) (Integer.MAX_VALUE / 2 - 1);
-		for (int j = 0; j < nodes; j++) {
-			for (int i = 0; i < j; i++) {
+		for (int i = 0; i < nodes; i++) {
+			for (int j = 0; j < i; j++) {
 				cost[i][j] = max;
 			}
 		}
@@ -66,10 +75,18 @@ public class SteinerTree {
 		while (!line.equals("END")) {
 			String[] line_array = line.split(" ");
 
-			from =  Integer.parseInt(line_array[1]) - 1;
-			to = Integer.parseInt(line_array[2]) - 1;
+			col =  Integer.parseInt(line_array[1]) - 1;
+			row = Integer.parseInt(line_array[2]) - 1;
 			c = Integer.parseInt(line_array[3]);
-			cost[from][to] = c;
+
+			// to prevent 009 issues, swap if col is bigger
+			if (col > row) {
+				int save = col;
+				col = row;
+				row = save;
+			}
+
+			cost[row][col] = c;
 			// enable this if complete matrix is needed (instead of triangular)
 			// cost[to][from] = c;
 			line = scan.nextLine();
@@ -90,5 +107,4 @@ public class SteinerTree {
 		}
 		return terminals;
 	}
-
 }
