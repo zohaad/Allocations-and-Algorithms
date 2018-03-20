@@ -1,0 +1,13 @@
+   //creates a matrix with the shortest path from any a to any b (using the Floyd-Warschall algorithm)
+    private static double[][] Floyd_Warschall_Matrix(double[][] matrix) {
+        for (int k = 0; k < 12; k++) {
+            for (int i = 0; i < 12; i++) {
+                for (int j = 0; j < 12; j++) {
+                    if (matrix[i][k] + matrix[k][j] < matrix[i][j]) {
+                        matrix[i][j] = matrix[i][k] + matrix[k][j];
+                    }
+                }
+            }
+        }
+        return matrix;
+    }
