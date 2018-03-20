@@ -1,0 +1,50 @@
+//the main algorithm of the code, uses dijkstra as its basis.
+    public static Boolean Dijkstra(Orders[] order,Roadlegs[] roadleg, int o) {
+        int origin = order[o].getOrigin();                                  // origin of package o
+        int destination = order[o].getDestination();                        // destination of package o
+        int[] best = new int[46];                                           //used to compare costs(times)
+        boolean[] visited = new boolean[46];                                //checks if city already visited
+        int[] array = new int [46];                                         //stores routes used to get to city i
+        for (int i = 1; i < best.length; i++) {
+            visited[i] = false;
+            best[i] = Integer.MAX_VALUE;
+        }
+        best[origin] = order[o].getDeparture();
+        array[origin]= -1;
+
+        for (int count = 1; count < best.length; count++) {
+            int node = minimum(best, visited);                              //checks for unvisited "best" node
+
+            if (best[node] == Integer.MAX_VALUE) {                          //no more feasible times
+                order[o].changeTime(Integer.MAX_VALUE);                     //order cannot be delivered
+                return false;}
+
+            if (node == destination) {                                      //checks if destination reached
+                order[o].changeTime(best[destination]);                     //time of order registered
+                printRoute(order, roadleg, array, array[destination], o);   //prints route in object order
+                reduceCapacity(order, roadleg, o);                          //uses route to reduce capacity roadleg
+                if (order[o].getTime() <= order[o].getArrival()){           //order is on time
+                    return true;
+                }
+                else return false;                                          //order is too late
+            }
+            int arrival;
+            visited[node] = true;
+            for (int r = 1; r < roadleg.length; r++) {
+                if (roadleg[r].getOrigin() == node){                        //checks if roadleg can be used
+                    if (roadleg[r].getDestination() != destination){
+                        arrival = roadleg[r].getArrivalTime() +200;         //adds transition time
+                    }
+                    else {arrival = roadleg[r].getArrivalTime();}           //no transition time needed
+                    if(best[node] <= roadleg[r].getDepartureTime()          //checks time contraint
+                        && best[roadleg[r].getDestination()] > arrival      //checks if new arrivaltime is better than old
+                        && order[o].getWeight() <= roadleg[r].getCapacity() //checks capacity constraint
+                    ){
+                        best[roadleg[r].getDestination()] = arrival;        //new arrivaltime is best time
+                        array[roadleg[r].getDestination()] = roadleg[r].getID(); //stores road used in array
+                    }
+                }
+            }
+        }
+        return false;
+    }
