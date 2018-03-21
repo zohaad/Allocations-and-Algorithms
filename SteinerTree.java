@@ -81,7 +81,7 @@ public class SteinerTree {
 
 			// to prevent 009 issues, swap if col is bigger
 			if (col > row) {
-				cost[col][row] =c
+				cost[col][row] =c;
 			}
 			else{
 			cost[row][col] = c;
