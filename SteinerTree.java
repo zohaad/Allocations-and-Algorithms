@@ -104,6 +104,20 @@ public class SteinerTree {
 		for (int i = 0; i < amount; i++) {
 			terminals[i] = Integer.parseInt(scan.nextLine().split(" ")[1]);
 		}
+		
+		/* terminal boolean array
+        	int[] terminal = new int[nodes+1];
+            	String line = scan.nextLine();
+            	line = scan.nextLine();
+            	line = scan.nextLine();
+
+            	while (!line.equals("END")) {
+                String[] line_array = line.split(" ");
+                terminal[Integer.parseInt(line_array[1])]=1;
+                line = scan.nextLine();
+            	}
+         	*/
+		
 		return terminals;
 	}
 }
