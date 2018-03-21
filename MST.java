@@ -18,7 +18,7 @@ public class MST {
 		// implement while loop that runs until total number of leaves is zero
 
 		// for every vertex v, that is not a terminal
-		System.out.println("Beginning leave deletion");
+		System.out.println("Beginning leaf deletion");
 		
 		int old_leave_size = -1; // arbitrary value 
 		while (this.leaves.size() != old_leave_size) {
@@ -41,7 +41,7 @@ public class MST {
 					}
 				}
 			}
-			System.out.println(this.leaves.size());	
+			System.out.println("# leaves deleted: " + this.leaves.size());	
 			old_leave_size = this.leaves.size();
 		}
 	}

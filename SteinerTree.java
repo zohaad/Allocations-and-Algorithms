@@ -17,6 +17,8 @@ public class SteinerTree {
 			int[] nodes_edges = amount_nodes_edges(scan);
 			int[][] cost = read_matrix(scan, nodes_edges[0]);
 			int[] terminals = read_terminals(scan);
+			// close scanner
+			scan.close();
 
 			// System.out.println(cost[1254][1129]);
 			// System.out.println(cost[1253][1129]);
@@ -25,8 +27,6 @@ public class SteinerTree {
 			MST mst = new MST(cost, terminals);
 			mst.delete_leaves();
 
-			// close scanner
-			scan.close();
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
