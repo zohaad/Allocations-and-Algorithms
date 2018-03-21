@@ -81,14 +81,13 @@ public class SteinerTree {
 
 			// to prevent 009 issues, swap if col is bigger
 			if (col > row) {
-				int save = col;
-				col = row;
-				row = save;
+				cost[col][row] =c
 			}
-
+			else{
 			cost[row][col] = c;
+			}
 			// enable this if complete matrix is needed (instead of triangular)
-			// cost[to][from] = c;
+			// cost[row][col] = cost[col][row] = c;
 			line = scan.nextLine();
 
 		}
