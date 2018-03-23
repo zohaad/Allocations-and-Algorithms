@@ -81,14 +81,13 @@ public class SteinerTree {
 
 			// to prevent 009 issues, swap if col is bigger
 			if (col > row) {
-				int save = col;
-				col = row;
-				row = save;
+				cost[col][row] =c;
 			}
-
+			else{
 			cost[row][col] = c;
+			}
 			// enable this if complete matrix is needed (instead of triangular)
-			// cost[to][from] = c;
+			// cost[row][col] = cost[col][row] = c;
 			line = scan.nextLine();
 
 		}
@@ -105,6 +104,20 @@ public class SteinerTree {
 		for (int i = 0; i < amount; i++) {
 			terminals[i] = Integer.parseInt(scan.nextLine().split(" ")[1]);
 		}
+		
+		/* terminal boolean array
+        	int[] terminal = new int[nodes+1];
+            	String line = scan.nextLine();
+            	line = scan.nextLine();
+            	line = scan.nextLine();
+
+            	while (!line.equals("END")) {
+                String[] line_array = line.split(" ");
+                terminal[Integer.parseInt(line_array[1])]=1;
+                line = scan.nextLine();
+            	}
+         	*/
+		
 		return terminals;
 	}
 }
