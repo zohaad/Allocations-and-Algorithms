@@ -17,14 +17,14 @@ public class MST {
 		
 		// implement while loop that runs until total number of leaves is zero
 
-		// for every vertex v, that is not a terminal
 		System.out.println("Beginning leaf deletion");
 		
-		int old_leave_size = -1; // arbitrary value 
-		while (this.leaves.size() != old_leave_size) {
+		int old_leave_size; 
+		do {
+			// for every vertex v, that is not a terminal
 			for (int v = 0; v < this.cost.length; v++) {
-				// if not a terminal
-				if (!terminal_check(v)) {
+				// if not a terminal and not a leaf already
+				if (!terminal_check(v) && !this.leaves.contains(v)) {
 					// arraylist with adjacent nodes
 					ArrayList<Integer> adjacent_to_v = new ArrayList<>();
 
@@ -35,7 +35,7 @@ public class MST {
 						}
 					}
 
-					if (adjacent_to_v.size() == 1) { // if it's a leaf
+					if (adjacent_to_v.size() == 1) { // a leaf only has one adjacent vertex
 						this.leaves.add(v);
 						System.out.println(v);
 					}
@@ -43,7 +43,8 @@ public class MST {
 			}
 			System.out.println("# leaves deleted: " + this.leaves.size());	
 			old_leave_size = this.leaves.size();
-		}
+
+		} while (this.leaves.size() != old_leave_size);
 	}
 
 	// to deal with upper triangle
