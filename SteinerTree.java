@@ -27,9 +27,10 @@ public class SteinerTree {
             System.out.println(nodes_edges[0] + " " + nodes_edges[1]);
 
             MST mst = new MST(cost, terminals);
-            mst.delete_leaves();
+
             //System.out.println("FW:");
             mst.Floyd_Warschall_Matrix();
+            mst.delete_leaves();
             mst.print_Matrix();
             for (int i = nodes_edges[0]; i>1; i--){
                 for (int j = i-1; j>0; j--){
@@ -37,6 +38,8 @@ public class SteinerTree {
                     mst.print_Pre();
                 }
             }
+
+            mst.Kruskal(nodes_edges[0]);
             /*mst.getPath(7,1);
             mst.print_Pre();
             mst.getPath(6,4);
@@ -125,7 +128,6 @@ public class SteinerTree {
             String line = scan.nextLine();
             line = scan.nextLine();
             line = scan.nextLine();
-
             while (!line.equals("END")) {
                 String[] line_array = line.split(" ");
                 terminal[Integer.parseInt(line_array[1])]=1;
