@@ -26,6 +26,7 @@ public class SteinerTree {
 
 			MST mst = new MST(cost, terminals);
 			mst.delete_leaves();
+			mst.floyd_warshall();
 
 
 		} catch (FileNotFoundException e) {
@@ -65,7 +66,7 @@ public class SteinerTree {
 		// make other edges cost very large
 		int max = (int) (Integer.MAX_VALUE / 2 - 1);
 		for (int i = 0; i < nodes; i++) {
-			for (int j = 0; j < i; j++) {
+			for (int j = 0; j < i; j++) { // cost[i][i] = 0
 				cost[i][j] = max;
 			}
 		}

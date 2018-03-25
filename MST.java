@@ -5,7 +5,7 @@ public class MST {
 	private int[][] cost;
 	private int[]	terminals;
 	private ArrayList<Integer> leaves;
-	private ArrayList<Integer>[] pre; //dit werkt niet denk ik, hoe lossen we dit op?
+	private Integer[][] next; // we can return null with Integer
 
 	public MST(int[][] cost, int[] terminals) {
 		this.cost      = cost;
@@ -58,25 +58,31 @@ public class MST {
 		for (int i = 0; i < this.terminals.length; i++) {
 			if (this.terminals[i] == v)
 				return true;
-
+		}
 		return false;
 	}
 	
-	 //creates a matrix with the shortest path from any a to any b (using the Floyd-Warschall algorithm)
-    public void Floyd_Warschall_Matrix() {
-        for (int k = 0; k < this.cost.length; k++) {
-            for (int i = 0; i < this.cost.length; i++) {
-                for (int j = 0; j < this.cost.length; j++) {
-                    if (cost(i,k) + cost(k,j) < cost(i,j)) {
-                        if(i > j) {this.cost[i][j] = cost(i,k) + cost(k,j);}
-                        else{this.cost[j][i] = cost(i,k) + cost(k,j);}
-                            //this.pre[i].add[j]
-                    }
-                }
+	public void floyd_warshall() {
+		this.next = new Integer[this.cost.length][];
+		for (int i = 0; i < this.next.length; i++) {
+			this.next[i] = new Integer[i + 1];
+		}
+		System.out.println("next matrix constructed!");
+		outerloop:
+		for (int k = 0; k < this.cost.length; k++) { // for each vertex
+			for (int i = 0; i < this.cost.length; i++) {
+				if (k == i) continue;
+				for (int j = 0; j < i; j++) { // triangular matrix, also skip cost[i][i] (== 0)  
+					if (this.cost[i][j] > cost(i,k) + cost(k,j)) {
+						this.cost[i][j] = cost(i,k) + cost(k,j);
+						System.out.println((cost(i,k) + " + " + cost(k,j)) + " < " + this.cost[i][j]);
+					}
 
-            }
-            System.out.println(k);
-        }
-        System.out.println("FW done");
-    }
+				}
+
+			}
+			System.out.println(k + "/" + (this.cost.length - 1));
+			if (k == 2) break outerloop;
+		}
+	}
 }
