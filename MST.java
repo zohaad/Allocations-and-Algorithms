@@ -16,7 +16,7 @@ public class MST {
             this.next[i] = new int[i+1];
             for (int j=0;j<this.next[i].length;j++){
                 if(i!=j) {
-                    next[i][j] = j + 1;
+                    next[i][j] = j;
                 }
             }
         }
@@ -76,19 +76,9 @@ public class MST {
 
     //creates a matrix with the shortest path from any a to any b (using the Floyd-Warschall algorithm)
     public void Floyd_Warschall_Matrix() {
-        //int[][] next = new int [cost.length][cost.length];
-        /*for (int i=0; i<this.cost.length; i++){
-            for (int j=0; j<this.cost[i].length;j++){
-                if(cost(i,j)< this.max){
-                    this.next[i][j] = j+1;
-                }
-            }
-        }*/
-
-
-        for (int k = 0; k < this.cost.length; k++) {
-            for (int i = 0; i < this.cost.length; i++) {
-                for (int j = 0; j < this.cost[i].length; j++) {
+        for (int k = 1; k < this.cost.length; k++) {
+            for (int i = 1; i < this.cost.length; i++) {
+                for (int j = 1; j < this.cost[i].length; j++) {
                     if (cost(i,k) + cost(k,j) < this.cost(i,j)) {
                         /*if(i > j) {this.cost[i][j] = cost(i,k) + cost(k,j);}
                         else{this.cost[j][i] = cost(i,k) + cost(k,j);}*/
@@ -105,52 +95,46 @@ public class MST {
     }
 
     public void print_Pre(){
-        //System.out.println(Arrays.toString(this.pre.toArray()));
-        System.out.println(this.pre.size());
         System.out.println(this.pre);
+        this.pre.clear();
     }
 
-    public void getPath(int i, int j){ //always i > j
-        if (this.next[i][j] == j) {
-            this.pre.add(j);
-            System.out.println("= j:" +j);
+    public void pathRecursion(int i, int j, int k){
+        int a= this.next[i][j];
+        if (a == min(i,j)) {
+            this.pre.add(k);
         }
-        else if (this.next[i][j] < j) {
-            this.pre.add(j);
-            System.out.println("< j :" +j);
-            getPath(j-1, this.next[i][j]);
+        else if (a >k){
+            this.pre.add(this.next[i][j]);
+            pathRecursion(a,k, k);
         }
-        else {
-            this.pre.add(j);
-            System.out.println("> j:" +j);
-            getPath(this.next[i][j]-1, j);
+        else{
+            this.pre.add(a);
+            pathRecursion(k, a, k);
         }
+    }
 
-        /*else{
-            if (this.next[j][i] == j) {
-                this.pre.add(j);
-            }
-            else{
-                getPath(this.next[j][i], j);
-                this.pre.add(j);
-            }
-        }*/
+    public void getPath(int i, int j) {
+        System.out.println("path:" + i + " " + j+ ":");
+        //System.out.print(i+" ");
+        this.pre.add(i);
+        pathRecursion(i,j,j);
     }
 
     public void print_Matrix(){
         System.out.println("Cost: ");
-        for(int i =0; i< this.cost.length; i++) {
-            System.out.print(i+1 +": ");
-            for (int j=0; j<this.cost[i].length; j++){
+        for(int i =1; i< this.cost.length; i++) {
+            System.out.print(i +": ");
+            for (int j=1; j<this.cost[i].length; j++){
                 System.out.print(this.cost[i][j]+ " ");
             }
             System.out.println();
         }
-        System.out.println("j: 1 2 3 4 5 6");
+        System.out.println("j: 1 2 3 4 5 6 7");
         System.out.println("next: ");
-        for(int i =0; i< this.cost.length; i++) {
-            System.out.print(i+1 +": ");
-            for (int j=0; j<this.cost[i].length; j++){
+        for(int i =1; i< this.cost.length; i++) {
+            System.out.print(i +": ");
+            for (int j=1; j<this.cost[i].length; j++){
                 if (i==j) {
                     System.out.println("-");
                 }
@@ -158,7 +142,11 @@ public class MST {
             }
             //System.out.println();
         }
-        System.out.println("j: 1 2 3 4 5 6");
+        System.out.println("j: 1 2 3 4 5 6 7");
+    }
+
+    public int min(int a, int b){
+        return a < b ? a : b;
     }
 
 }
