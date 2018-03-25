@@ -11,7 +11,7 @@ public class SteinerTree {
         //int[][] cost = new int[22516][22516];
 
         //String filename = "instance" + args[0] + ".gr";
-        String filename = "C:\\Users\\Mark\\Desktop\\heuristic\\public\\instance000.gr";
+        String filename = "instance" + args[0] + ".gr";
         File file = new File(filename);
         try {
             Scanner scan = new Scanner(file);
