@@ -38,6 +38,7 @@ public class Reader {
 
 		for (int i = 0; i < this.cost.length; i++) {
 			this.cost[i] = new Integer[i + 1];
+			this.cost[i][i] = 0;
 		}
 
 		int from;
@@ -81,4 +82,5 @@ public class Reader {
 
 		return this.terminals;
 	}
+
 }

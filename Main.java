@@ -16,10 +16,16 @@ public class Main {
 
 			Mst mst = new Mst(cost);
 			Integer[][] fw = mst.floyd_warshall();
-			ArrayList<Integer> path = mst.path(2, 137);
-			Mst.print_path(path);
+			
+			// testing
+			ArrayList<Integer> path = mst.path(58, 70);
+			System.out.print("path from " + 58 + " to " + 70 + ": ");
+			Mst.print_ArrayList(path);
+
+			fw = Leaves.remove(fw, terminals);
 			
 			
+
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
