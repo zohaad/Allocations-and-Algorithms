@@ -1,51 +1,92 @@
 import java.util.*;
 
-public class MST {
+public class Mst {
 
-	private int[][] cost;
-	private int[]	terminals;
-	private ArrayList<Integer> leaves;
-	private ArrayList<Integer>[] pre; //dit werkt niet denk ik, hoe lossen we dit op?
+	private Integer[][] cost;
+	private Integer[][] next;
 
-	public MST(int[][] cost, int[] terminals) {
-		this.cost      = cost;
-		this.terminals = terminals;
-		this.leaves = new ArrayList<>();
-		// this.pre = new ArrayList[cost.length]; //dit werkt niet denk ik, hoe lossen we dit op?
+	public Mst(Integer[][] cost) {
+		//intialization
+		this.cost = cost;
+		this.next = new Integer[this.cost.length][];
+		for (int i = 0; i < this.next.length; i++) {
+			this.next[i] = this.cost[i] == null ? null : new Integer[this.cost[i].length];
+		}
 	}
 
-	// to deal with upper triangle
-	public int cost(int a, int b) {
-		return a > b ? this.cost[a][b] : this.cost[b][a];//a>b return [a][b] else return [b][a]
-	}
 
-	public boolean terminal_check(int v) {
-		for (int i = 0; i < this.terminals.length; i++) {
-			if (this.terminals[i] == v)
-				return true;
+    public Integer[][] floyd_warshall() {
 
-		return false;
-	}
+    	for (int k = 0; k < this.cost.length; k++) {
+    		for (int i = 0; i < this.cost.length; i++) {
+    			for (int j = 0; j <= i; j++) { // we can skip half the matrix because it is symmetrical
+    				if (cost(i, j) > cost(i, k) + cost(k, j)) {
+    					// don't want to mess with loop variables, introduce x and y
+    					int x = i;
+    					int y = j;
+
+    					if (y > x) { // determine if we need to swap
+    						int save = x;
+    						x = y;
+    						y = save;
+    					}
+    					this.cost[x][y] = cost(x, k) + cost(k, y); // we don't mess with k here, look at cost() method below
+    					this.next[x][y] = x > k ? this.next[x][k] : this.next[k][x]; // let's hope this works
+    				}
+    			}
+    		}
+    		System.out.println(k + "/" + this.cost.length);
+    	}
+    	// maybe make it void?
+    	return this.cost;
+    }
+
+    public Integer[][] return_next() {
+    	return this.next;
+    }
+
 	
-	 //creates a matrix with the shortest path from any a to any b (using the Floyd-Warschall algorithm)
-    public void Floyd_Warschall_Matrix() {
-        for (int k = 0; k < this.cost.length; k++) {
-            for (int i = 0; i < this.cost.length; i++) {
-                for (int j = 0; j < this.cost.length; j++) {
-                    if (cost(i,k) + cost(k,j) < cost(i,j)) {
-                        if(i > j) {this.cost[i][j] = cost(i,k) + cost(k,j);}
-                        else{this.cost[j][i] = cost(i,k) + cost(k,j);}
-                            //this.pre[i].add[j]
-                    }
-                }
+	public Integer cost(int a, int b) {
+		int x = a;
+		int y = b;
+		int max = Integer.MAX_VALUE / 2 - 1;
+		if (y > x) { // to deal with lower triangle
+			int save = x;
+			x = y;
+			y = save;
+		}
+		if (this.cost[x] == null || this.cost[x][y] == null) { // first check for null, else NullPointerException
+			return max;
+		}
 
-            }
-            System.out.println(k);
-        }
-        System.out.println("FW done");
-    }
+		return this.cost[x][y];
+	}
 
-    public void floyd_warshall() {
-    	
-    }
+	public ArrayList<Integer> path(int i, int j) { // Wikipedia
+		int u = i;
+		int v = j;
+		if (v > u) {
+			int save = u;
+			u = v;
+			v = save;
+		}
+		// algorithm
+
+		ArrayList<Integer> path = new ArrayList<>();
+		if (this.next[u][v] == null) {
+			return path; // empty arraylist
+		}
+		
+		path.add(u);
+		while (u != v) {
+			u = v > u ? this.next[v][u] : this.next[u][v];
+			path.add(u);
+		}
+		return path;
+	}
+
+	public static void print_path(ArrayList<Integer> path) {
+		System.out.println(Arrays.deepToString(path.toArray()));
+	}
+
 }

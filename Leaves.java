@@ -21,7 +21,6 @@ public class Leaves {
 							adjacency_number++;
 						}
 					}
-					System.out.println("v: " + v);
 					if (adjacency_number == 1) {
 						
 						for (int i = v; i < matrix.length; i++) { // delete column

@@ -11,21 +11,15 @@ public class Main {
 			Integer[][] cost = reader.read_cost();
 			ArrayList<Integer> terminals = reader.read_terminals();
 			cost = Leaves.remove(cost, terminals);
-			System.gc();
-			
-			// cost = Leaves.remove(cost, )
 
-			// debugging
-			// outerloop:
-			// for (int i = 0; i < cost.length; i++) {
-			// 	for (int j = 0; j < cost[i].length; j++) {
-			// 		System.out.println("i: " + i + " j: " + j +  " c: " + cost[i][j]);
-			// 		if (cost[i][j] != null) {
-			// 			break outerloop;
-			// 		}
-			// 	}
-				
-			// }
+			System.gc();
+
+			Mst mst = new Mst(cost);
+			Integer[][] fw = mst.floyd_warshall();
+			ArrayList<Integer> path = mst.path(2, 137);
+			Mst.print_path(path);
+			
+			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}

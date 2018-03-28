@@ -1,3 +1,5 @@
+// update: obsolete
+
 /* A class to do trianguar matrix manipulation.
 
    The delete() method works on the fact that deletion
