@@ -4,10 +4,15 @@ public class Mst {
 
 	private Integer[][] cost;
 	private Integer[][] next;
+	private ArrayList<int[]> A; // tree containing edges
+	private DisjointSets S; // disjoint sets
 
 	public Mst(Integer[][] cost) {
 		//intialization
 		this.cost = cost;
+
+		// Floyd-Warshall's algorithm
+
 		this.next = new Integer[this.cost.length][];
 		for (int i = 0; i < this.next.length; i++) {
 			this.next[i] = this.cost[i] == null ? null : new Integer[this.cost.length];
@@ -18,6 +23,9 @@ public class Mst {
 				}
 			}
 		}
+
+		// Kruskal's algorithm
+		this.S = new DisjointSets();
 	}
 
 
@@ -42,6 +50,7 @@ public class Mst {
     				}
     			}
     		}
+    		// Status updates:
     		// System.out.println(k + "/" + (this.cost.length - 1));
     	}
     	System.out.println("Floyd-Warshall done!");
@@ -70,15 +79,8 @@ public class Mst {
 		return this.cost[x][y];
 	}
 
-	public ArrayList<Integer> path(int i, int j) { // Wikipedia
-		int u = i;
-		int v = j;
-		// if (v > u) {
-		// 	int save = u;
-		// 	u = v;
-		// 	v = save;
-		// }
-		// algorithm
+	public ArrayList<Integer> path(int u, int v) { // Wikipedia
+
 		ArrayList<Integer> path = new ArrayList<>();
 
 		if (this.next[u] == null || this.next[u][v] == null) {
@@ -95,5 +97,51 @@ public class Mst {
 
 	public static void print_ArrayList(ArrayList<Integer> x) {
 		System.out.println(Arrays.deepToString(x.toArray()));
+	}
+
+	public ArrayList<int[]> kruskal() {
+		for (int v = 0; v < this.cost.length; v++) { // for every vertex ..
+			if (this.cost[v] != null) { // .. that exists ..
+				this.S.add(v); // make a disjoint set
+			}
+		}
+
+		ArrayList<int[]> ordered_edges = ordered_edges();
+
+		this.A = new ArrayList<int[]>();
+
+		for (int[] e : ordered_edges) { // e for edge
+			if (this.S.find(e[0]) != this.S.find(e[1])) {
+				this.A.add(e);
+				this.S.union(e[0], e[1]); // adds the set of e[1] to the set of e[0] and deletes the set of e[1]
+			}
+		}
+		return this.A;
+	}
+
+	public ArrayList<int[]> ordered_edges() { // orderes edges increasing
+		ArrayList<int[]> edges = new ArrayList<>();
+
+		
+		for (int i = 0; i < this.cost.length; i++) { // go over cost array
+			if (this.cost[i] == null) { // skip if vertex i doesn't exist
+				continue;
+			}
+			for (int j = 0; j < i; j++) { // don't consider this.cost[i][i]
+				if (this.cost[i][j] != null) { // and cost i-j is defined
+					int[] edge = new int[3];
+					edge[0] = i;
+					edge[1] = j;
+					edge[2] = this.cost[i][j];
+					edges.add(edge);
+				}
+			}
+		}
+
+		// sorting by cost, uses Java 8
+		edges.sort(Comparator.comparingInt(a -> a[2])); 
+		
+		// TODO ?: remove cost
+		return edges;
 	}
 }

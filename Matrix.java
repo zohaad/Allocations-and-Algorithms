@@ -1,4 +1,5 @@
-// update: obsolete
+// update: obsolete class, only need to do deletion at
+// Leaves class so no need for seperate method
 
 /* A class to do trianguar matrix manipulation.
 

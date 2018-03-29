@@ -20,6 +20,11 @@ public class Reader {
 		}
 	}
 
+	// 2nd constructor for kruskal
+	public Reader(int nodes) {
+		this.nodes = nodes;
+	}
+
 	public void amount_nodes_edges() {
 		// skip first line
 		this.scan.nextLine();
@@ -63,6 +68,33 @@ public class Reader {
 		return this.cost;
 	}
 
+
+	// method for kruskal cost
+	public Integer[][] read_cost(ArrayList<int[]> mst) { // given a MST, make a new matrix
+		this.cost = new Integer[this.nodes][];
+
+		for (int i = 0; i < this.cost.length; i++) {
+			this.cost[i] = new Integer[i + 1];
+			this.cost[i][i] = 0;
+		}
+
+		int from;
+		int to;
+
+		for (int[] e : mst) {
+			if (e[0] > e[1]) {
+				from = e[0];
+				to   = e[1];
+			} else {
+				from = e[1];
+				to   = e[0];
+			}
+
+			this.cost[from][to] = e[2];
+		}
+		return this.cost;
+	}
+
 	public ArrayList<Integer> read_terminals() 
 	throws java.io.FileNotFoundException {
 		this.terminals = new ArrayList<Integer>();
@@ -82,5 +114,6 @@ public class Reader {
 
 		return this.terminals;
 	}
+
 
 }
