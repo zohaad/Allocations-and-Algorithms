@@ -114,6 +114,4 @@ public class Reader {
 
 		return this.terminals;
 	}
-
-
 }

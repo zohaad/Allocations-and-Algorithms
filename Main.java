@@ -8,15 +8,35 @@ public class Main {
 		Reader reader = new Reader(file);
 
 		try {
+
+			// plan
+			// leaves deletion -> floyd-warshall -> kruskal -> leaves deletion -> backtracking (make set) -> new graph -> kruskal (no cycles) -> leaves deletion
+
 			Integer[][] cost = reader.read_cost();
 			ArrayList<Integer> terminals = reader.read_terminals();
+			// leaves deletion
 			cost = Leaves.remove(cost, terminals);
-
 			System.gc();
 
+			// floyd-warshall
 			Mst mst = new Mst(cost);
-			Integer[][] fw = mst.floyd_warshall();
+			mst.floyd_warshall();
+			// kruskal
+			ArrayList<int[]> kruskal_edges = mst.kruskal();
+			Reader kruskal_reader = new Reader(cost.length);
+			Integer[][] kruskal_cost = kruskal_reader.read_cost(kruskal_edges);
+
+			// leaves deletion
+			kruskal_cost = Leaves.remove(kruskal_cost, terminals);
+
+			// TODO: backtracking
+			// TODO: new graph
+			// TODO: kruskal
+			// TODO: leaves deletion
 			
+			// TODO: writing to file (with +1 correction!)
+			Writer writer = new Writer(Integer.parseInt(args[0]), kruskal_cost);
+
 			// to verify that costs are equal, change x to 58, y to 70
 			// int x = 70;
 			// int y = 58;
@@ -29,13 +49,6 @@ public class Main {
 			// }
 			// System.out.println("cost: " + c);
 			// end verification
-
-			ArrayList<int[]> kruskal_edges = mst.kruskal();
-			System.out.println("Kruskal done!");
-
-			Reader kruskal_reader = new Reader(cost.length);
-			Integer[][] kruskal_cost = kruskal_reader.read_cost(kruskal_edges);
-			kruskal_cost = Leaves.remove(kruskal_cost, terminals);
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

@@ -30,7 +30,6 @@ public class Mst {
 
 
     public Integer[][] floyd_warshall() {
-    	outerloop:
     	for (int k = 0; k < this.cost.length; k++) {
     		for (int i = 0; i < this.cost.length; i++) {
     			for (int j = 0; j < i + 1; j++) { // we can skip half the matrix because it is symmetrical
@@ -51,7 +50,7 @@ public class Mst {
     			}
     		}
     		// Status updates:
-    		// System.out.println(k + "/" + (this.cost.length - 1));
+    		System.out.println(k + "/" + (this.cost.length - 1));
     	}
     	System.out.println("Floyd-Warshall done!");
     	// maybe make it void?
@@ -116,6 +115,8 @@ public class Mst {
 				this.S.union(e[0], e[1]); // adds the set of e[1] to the set of e[0] and deletes the set of e[1]
 			}
 		}
+
+		System.out.println("Kruskal done!");
 		return this.A;
 	}
 
@@ -143,5 +144,9 @@ public class Mst {
 		
 		// TODO ?: remove cost
 		return edges;
+	}
+
+	public Mst copy() {
+		return new Mst(this.cost);
 	}
 }
