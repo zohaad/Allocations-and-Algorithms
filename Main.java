@@ -38,7 +38,7 @@ public class Main {
 
 				ArrayList<Integer> path = mst.path(e[0], e[1]);
 				for (Integer n : path) {
-					if (!non_metric_nodes.contains(n)) { // taking care of double edges
+					if (!non_metric_nodes.contains(n)) { // ensuring edges will be unique
 						non_metric_nodes.add(n);
 					}
 				}
@@ -59,6 +59,7 @@ public class Main {
 			// leaves deletion
 			Leaves.remove(kruskal_cost, terminals);
 
+			// calculating 2OPT-cost
 			int two_opt_cost = 0;
 
 			for (int i = 0; i < kruskal_cost.length; i++) {
@@ -71,9 +72,16 @@ public class Main {
 
 			System.out.println("2OPT cost: " + two_opt_cost);
 
-			// TODO: writing to file (with +1 correction!)
-			Writer writer = new Writer(Integer.parseInt(args[0]), kruskal_cost);
-			writer.write();
+			System.gc();
+
+			// writing file with +1 correction
+			Writer writer = new Writer(args[0], kruskal_cost, two_opt_cost);
+			try {
+				writer.write();
+			} catch (IOException io) {
+				io.printStackTrace();
+			}
+			
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
