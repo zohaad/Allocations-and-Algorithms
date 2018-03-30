@@ -14,12 +14,14 @@ public class Main {
 
 			Integer[][] cost = reader.read_cost();
 			ArrayList<Integer> terminals = reader.read_terminals();
+
 			// leaves deletion
 			cost = Leaves.remove(cost, terminals);
 			System.gc();
 
 			// floyd-warshall
 			Mst mst = new Mst(cost);
+			Mst original_mst = new Mst(cost);
 			mst.floyd_warshall();
 			// kruskal
 			ArrayList<int[]> kruskal_edges = mst.kruskal();
@@ -29,26 +31,49 @@ public class Main {
 			// leaves deletion
 			kruskal_cost = Leaves.remove(kruskal_cost, terminals);
 
-			// TODO: backtracking
-			// TODO: new graph
-			// TODO: kruskal
-			// TODO: leaves deletion
-			
+			// backtracking
+			System.out.println("Backtracking");
+			ArrayList<Integer> non_metric_nodes = new ArrayList<>();
+			for (int[] e : kruskal_edges) {
+
+				ArrayList<Integer> path = mst.path(e[0], e[1]);
+				for (Integer n : path) {
+					if (!non_metric_nodes.contains(n)) { // taking care of double edges
+						non_metric_nodes.add(n);
+					}
+				}
+			}
+			System.out.println(non_metric_nodes.size());
+			// Mst.print_ArrayList(non_metric_nodes);4
+
+			System.gc();
+
+			// make "residual" graph
+			original_mst.remove_except(non_metric_nodes);
+
+			// kruskal to make it a tree, remove cycles
+			kruskal_edges = original_mst.kruskal();
+			kruskal_reader = new Reader(cost.length);
+			kruskal_cost = kruskal_reader.read_cost(kruskal_edges);
+
+			// leaves deletion
+			Leaves.remove(kruskal_cost, terminals);
+
+			int two_opt_cost = 0;
+
+			for (int i = 0; i < kruskal_cost.length; i++) {
+				for (int j = 0; j < i; j++) { // <= case is always 0
+					if (kruskal_cost[i] != null && kruskal_cost[i][j] != null) {
+						two_opt_cost += kruskal_cost[i][j];
+					}
+				}
+			}
+
+			System.out.println("2OPT cost: " + two_opt_cost);
+
 			// TODO: writing to file (with +1 correction!)
 			Writer writer = new Writer(Integer.parseInt(args[0]), kruskal_cost);
-
-			// to verify that costs are equal, change x to 58, y to 70
-			// int x = 70;
-			// int y = 58;
-			// ArrayList<Integer> path = mst.path(x, y);
-			// System.out.print("from " + x + " to " + y + ": ");
-			// Mst.print_ArrayList(path);
-			// int c = 0;
-			// for (int i = 0; i < path.size() - 1; i++) {
-			// 	c += mst.cost(path.get(i), path.get(i + 1));
-			// }
-			// System.out.println("cost: " + c);
-			// end verification
+			writer.write();
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

@@ -149,4 +149,21 @@ public class Mst {
 	public Mst copy() {
 		return new Mst(this.cost);
 	}
+
+	public Integer[][] remove_except(ArrayList<Integer> exceptions) {
+		for (int v = 0; v < this.cost.length; v++) {
+			if (exceptions.contains(v)) { // if exception
+				continue; // do nothing
+			} else {
+				for (int i = v; i < this.cost.length; i++) {
+					if (this.cost[i] != null) { // remove column
+						this.cost[i][v] = null;
+					}
+				}
+				this.cost[v] = null; // remove row
+			}
+			System.out.println("removed: " + v);
+		}
+		return this.cost;
+	}
 }
